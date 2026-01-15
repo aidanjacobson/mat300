@@ -15,7 +15,10 @@ example {p q : ℚ} (h1 : p - 2 * q = 1) (h2 : q = -1) : p = -1 :=
     _ = -1 := by ring
 
 example {u v : ℚ} (h1 : 4 * u + v = 3) (h2 : v = 2) : u = 1 / 4 :=
-  sorry
+  calc
+    u = (4*u+v-v)*1/4 := by ring
+    _ = (3-2)*1/4 := by rw[h1,h2]
+    _ = 1/4 := by ring
 
 example {u v : ℝ} (h1 : u + 1 = v) : u ^ 2 + 3 * u + 1 = v ^ 2 + v - 1 :=
   calc
@@ -26,4 +29,8 @@ example {u v : ℝ} (h1 : u + 1 = v) : u ^ 2 + 3 * u + 1 = v ^ 2 + v - 1 :=
 
 example {t : ℚ} (ht : t ^ 2 - 4 = 0) :
     t ^ 4 + 3 * t ^ 3 - 3 * t ^ 2 - 2 * t - 2 = 10 * t + 2 :=
-  sorry
+    calc
+      t^4+3*t^3-3*t^2-2*t-2 = (t^2-4+4)*(t^2-4+4)+(t^2-4+4)*(3*t)-(t^2-4+4)*3-2*t-2 := by ring
+      _ = (0+4)*(0+4) + (0+4)*(3*t) - (0+4)*3 - 2*t - 2 := by rw[ht]
+      _ = 16 + 12*t - 12 - 2*t - 2 := by ring
+      _ = 10*t + 2 := by ring
