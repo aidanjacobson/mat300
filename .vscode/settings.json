@@ -10,4 +10,9 @@
     "lean4.infoview.emphasizeFirstGoal": true,
     "lean4.infoview.showGoalNames": false,
     "chat.disableAIFeatures": true,
+    "editor.quickSuggestions": {
+        "other": "off"
+    },
+    "editor.suggestOnTriggerCharacters": false,
+    "editor.inlineSuggest.enabled": false,
 }
