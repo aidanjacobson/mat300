@@ -7,7 +7,14 @@ math2001_init
 
 --1
 example {a b : ℚ} (h1 : 3 ≤ a) (h2 : a + 2 * b ≥ 4) : a + b ≥ 3 := by
-sorry
+have h: b ≥ 1 := by calc
+  0 ≤ a + 2*b - 4 := by addarith[h2]
+  _ ≤ 3 + 2*b - 4 := by rel[h1]
+
+calc
+  a + b = a + 2*b - b := by ring
+  _ ≥ 4 - b := by rel[h2]
+
 
 
 --2
