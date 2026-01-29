@@ -53,6 +53,11 @@ example (a b : ℝ) (h1 : a - 5 ≤ 7) (h2 : b + 3 * a ≥ 16) : b > -25 :=
 
 --6
 example {n : ℤ} (hn : n ^ 2 + 4 = 4 * n) : n = 2 := by
-  have h := calc
-    0 = n^2-4*n+4 := by addarith[hn]
-    _ = (n-2)^2 := by ring
+  -- have h := calc
+  --   0 = n^2-4*n+4 := by addarith[hn]
+  --   _ = (n-2)^2 := by ring
+
+  calc
+    n = 4*n - 3*n := by ring
+    _ = n^2 + 4 - 3*n := by rw[hn]
+    _ =
