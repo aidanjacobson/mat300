@@ -6,32 +6,22 @@ math2001_init
 
 
 --1
-example {a b : ℚ} (h1 : 3 ≤ a) (h2 : a + 2 * b ≥ 4) : a + b ≥ 3 := by
-have h: b ≥ 1 := by calc
-  0 ≤ a + 2*b - 4 := by addarith[h2]
-  _ ≤ 3 + 2*b - 4 := by rel[h1]
-
-calc
-  a + b = a + 2*b - b := by ring
-  _ ≥ 4 - b := by rel[h2]
-
+example {a b : ℚ} (h1 : 3 ≤ a) (h2 : a + 2 * b ≥ 4) : a + b ≥ 3 := by calc
+  a + 2*b = a+2*b+a := by ring
+  _ ≥ a + 2*b + 3 := by rel[h1]
+sorry
 
 
 --2
 example {n : ℤ} (hn : n ≥ 10) : n ^ 4 - 2 * n ^ 2 > 3 * n ^ 3 := by
-  have h : n^2 ≥ 100 := by calc
-    n^2 ≥ 10^2 := by rel[hn]
-    _ = 100 := by ring
+  have h: n^4 - 3*n^3 - 2*n^2 > 0 := by
+    calc
+      n^4 - 3*n^3 - 2*n^2 ≥ 10^4 - 3*10^3 - 2*10^2 := by rel[hn]
+      _ = 6800 := by numbers
+      _ > 0 := by numbers
+  addarith[h]
 
-  have h2 : 3*n^3 ≥ 3000 := by calc
-    3*n^3 ≥ 3*10^3 := by rel[hn]
-    _ = 3000 := by ring
 
-  calc
-    n^4-2*n^2 = (n^2-1)^2 - 1 := by ring
-    _ ≥ (100-1)^2-1 := by rel[hn]
-    _ = 9800 := by ring
-    _ > 3000 := by numbers
 
 
 
@@ -60,11 +50,11 @@ example (a b : ℝ) (h1 : a - 5 ≤ 7) (h2 : b + 3 * a ≥ 16) : b > -25 :=
 
 --6
 example {n : ℤ} (hn : n ^ 2 + 4 = 4 * n) : n = 2 := by
-  -- have h := calc
-  --   0 = n^2-4*n+4 := by addarith[hn]
-  --   _ = (n-2)^2 := by ring
-
-  calc
-    n = 4*n - 3*n := by ring
-    _ = n^2 + 4 - 3*n := by rw[hn]
-    _ =
+  have h1: 0 = (n - 2) * (n - 2) := by
+    calc
+      0 = n^2 - 4*n + 4 := by addarith[hn]
+      _ = (n-2)*(n-2) := by ring
+  apply symm at h1
+  obtain h2|h3 := eq_zero_or_eq_zero_of_mul_eq_zero h1
+  addarith[h2]
+  addarith[h3]
