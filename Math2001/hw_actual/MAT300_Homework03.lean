@@ -38,7 +38,23 @@ example {s t : ℚ} (h : s = 3 - t) : s + t = 3 ∨ s + t = 5 := by
 
 
 --5
-example {a b : ℝ} (hab : a ^ 2 + 2 * b ^ 2 = 3 * a * b) : a = b ∨ a = 2 * b := sorry
+example {a b : ℝ} (hab : a ^ 2 + 2 * b ^ 2 = 3 * a * b) : a = b ∨ a = 2 * b := by
+  have h: a^2 - 3*a*b + 2*b^2 = 0 := by addarith[hab]
+  have h2: (a-b)*(a-2*b)=0 := by calc
+    (a-b)*(a-2*b) = a^2 - 3*a*b + 2*b^2 := by ring
+    _ = 0 := by rw[h]
+  obtain h3|h4 := eq_zero_or_eq_zero_of_mul_eq_zero h2
+  left
+  calc
+    a = a - b + b := by ring
+    _ = 0 + b := by rw[h3]
+    _ = b := by ring
+  right
+  calc
+    a = a - 2*b + 2*b := by ring
+    _ = 0 + 2*b := by rw[h4]
+    _ = 2*b := by ring
+
 
 ---6
 example {m : ℕ} : m ^ 2 + 4 * m ≠ 46 := by
