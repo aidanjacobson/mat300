@@ -20,7 +20,32 @@ example {a b : ℝ} (ha1 : a ^ 2 ≤ 5) (hb1 : b ^ 2 ≤ 5) (ha2 : ∀ y, y ^ 2 
 
 -- 2 (Hint Use mod_cases)
 example {n : ℤ} : (3 ∣ n) ∨ (3 ∣ (n + 2)) ∨ (3 ∣ (n + 4)) := by
-  sorry
+  mod_cases hn : n % 3
+  · obtain ⟨x,hx⟩ := hn
+    left
+    use x
+    calc
+      n = n - 0 := by ring
+      _ = 3*x := by rw[hx]
+  · obtain ⟨x,hx⟩ := hn
+    right
+    left
+    use x+1
+    calc
+      n + 2 = (n - 1) + 3 := by ring
+      _ = 3*x + 3 := by rw[hx]
+      _ = 3*(x+1) := by ring
+  · obtain ⟨x,hx⟩ := hn
+    right
+    right
+    use x+2
+    calc
+      n + 4 = (n - 2) + 6 := by ring
+      _ = 3*x + 6 := by rw[hx]
+      _ = 3*(x+2) := by ring
+
+
+
 
 --3 (Hint: graph on desmos)
 example {a : ℚ} (h : ∀ b : ℚ, a ≥ -3 + 4 * b - b ^ 2) : a ≥ 1 :=
