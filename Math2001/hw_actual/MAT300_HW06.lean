@@ -57,4 +57,22 @@ example {n : ℤ} (hn : ∀ m, 1 ≤ m ∧ m ≤ 5 → m ∣ n) : 15 ∣ n := by
 
  -- 5
 example {x : ℝ} : x ^ 2 - 3 * x + 2 = 0 ↔ x = 1 ∨ x = 2 := by
-  sorry
+  constructor
+  · intro h
+    have h2: (x-1)*(x-2) = 0 := by
+      calc
+        (x-1)*(x-2) = x^2 - 3*x + 2 := by ring
+        _ = 0 := by rw[h]
+    obtain ha|hb := eq_zero_or_eq_zero_of_mul_eq_zero h2
+    left
+    addarith[ha]
+    right
+    addarith[hb]
+  · intro h
+    obtain ha|hb := h
+    calc
+      x^2 - 3*x + 2 = 1^2 - 3*1 + 2 := by rw[ha]
+      _ = 0 := by numbers
+    calc
+      x^2 - 3*x + 2 = 2^2 - 3*2 + 2 := by rw[hb]
+      _ = 0 := by numbers
