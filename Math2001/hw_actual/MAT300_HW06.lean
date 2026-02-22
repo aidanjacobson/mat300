@@ -16,7 +16,11 @@ namespace Int
 
 -- 1 (Hint: see Example 4.1.4 in the text)
 example {a b : ℝ} (ha1 : a ^ 2 ≤ 5) (hb1 : b ^ 2 ≤ 5) (ha2 : ∀ y, y ^ 2 ≤ 5 → y ≤ a) (hb2 : ∀ y, y ^ 2 ≤ 5 → y ≤ b) : a = b := by
-  sorry
+  apply le_antisymm
+  · apply hb2
+    apply ha1
+  · apply ha2
+    apply hb1
 
 -- 2 (Hint Use mod_cases)
 example {n : ℤ} : (3 ∣ n) ∨ (3 ∣ (n + 2)) ∨ (3 ∣ (n + 4)) := by
@@ -45,15 +49,34 @@ example {n : ℤ} : (3 ∣ n) ∨ (3 ∣ (n + 2)) ∨ (3 ∣ (n + 4)) := by
       _ = 3*(x+2) := by ring
 
 
-
-
 --3 (Hint: graph on desmos)
-example {a : ℚ} (h : ∀ b : ℚ, a ≥ -3 + 4 * b - b ^ 2) : a ≥ 1 :=
-  sorry
+example {a : ℚ} (h : ∀ b : ℚ, a ≥ -3 + 4 * b - b ^ 2) : a ≥ 1 := by
+  calc
+    a ≥ -3 + 4*2 - 2^2 := by apply h
+    _ = 1 := by numbers
+
 
 --4 (Hint: see Example 3.5.3 for the trick)
 example {n : ℤ} (hn : ∀ m, 1 ≤ m ∧ m ≤ 5 → m ∣ n) : 15 ∣ n := by
-  sorry
+  have h1: 5∣n := by
+    apply hn
+    constructor
+    · numbers
+    · numbers
+  have h2: 3∣n := by
+    apply hn
+    constructor
+    · numbers
+    · numbers
+  obtain ⟨a,ha⟩ := h1
+  obtain ⟨b,hb⟩ := h2
+  use 2*a - b
+  calc
+    n = 6*n - 5*n := by ring
+    _ = 6*(5*a) - 5*n := by rw[ha]
+    _ = 6*(5*a) - 5*(3*b) := by rw[hb]
+    _ = 15*(2*a - b) := by ring
+
 
  -- 5
 example {x : ℝ} : x ^ 2 - 3 * x + 2 = 0 ↔ x = 1 ∨ x = 2 := by
