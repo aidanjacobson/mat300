@@ -93,7 +93,32 @@ example (n : ℤ) (hn : n ^ 2 ≡ 4 [ZMOD 5]) : n ≡ 2 [ZMOD 5] ∨ n ≡ 3 [ZM
       n^2 = n*n := by ring
       _ ≡ 0*0 [ZMOD 5] := by rel[h]
       _ ≡ 0 [ZMOD 5] := by numbers
-    sorry
+    have h3: 4 ≡ 0 [ZMOD 5] := by calc
+      4 ≡ n^2 [ZMOD 5] := by rel[hn]
+      _ ≡ 0 [ZMOD 5] := by rel[h2]
+    numbers at h3
+  · have h2: n^2 ≡ 1 [ZMOD 5] := by calc
+      n^2 = n*n := by ring
+      _ ≡ 1*1 [ZMOD 5] := by rel[h]
+      _ ≡ 1 [ZMOD 5] := by numbers
+    have h3: 4 ≡ 1 [ZMOD 5] := by calc
+      4 ≡ n^2 [ZMOD 5] := by rel[hn]
+      _ ≡ 1 [ZMOD 5] := by rel[h2]
+    numbers at h3
+  · left
+    apply h
+  · right
+    apply h
+  · have h2: n^2 ≡ 1 [ZMOD 5] := by calc
+      n^2 = n*n := by ring
+      _ ≡ 4*4 [ZMOD 5] := by rel[h]
+      _ = 1 + 5*3 := by numbers
+      _ ≡ 1 [ZMOD 5] := by extra
+    have h3: 4 ≡ 1 [ZMOD 5] := by calc
+      4 ≡ n^2 [ZMOD 5] := by rel[hn]
+      _ ≡ 1 [ZMOD 5] := by rel[h2]
+    numbers at h3
+
 
 
 
