@@ -78,7 +78,26 @@ example (n : ℤ) (hn : n ^ 2 ≡ 4 [ZMOD 5]) : n ≡ 2 [ZMOD 5] ∨ n ≡ 3 [ZM
 #check better_prime_test
 
 --5 (Hint: use prime_test or better_prime_test and Nat.not_dvd_of_exists_lt_and_lt)
-example : Prime 19 := sorry
+example : Prime 19 := by
+  apply better_prime_test (T := 5)
+  numbers
+  numbers
+  intro m h1 h2
+  apply Nat.not_dvd_of_exists_lt_and_lt
+  interval_cases m
+  · use 9
+    constructor
+    · numbers
+    · numbers
+  · use 6
+    constructor
+    · numbers
+    · numbers
+  · use 4
+    constructor
+    · numbers
+    · numbers
+
 
 --6 (Hint: Nat.even_or_odd)
 example (p : ℕ ) (h : Prime p) : p = 2 ∨ Odd p := sorry
