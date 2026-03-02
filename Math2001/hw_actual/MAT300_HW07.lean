@@ -16,13 +16,36 @@ example : ∃! x : ℝ, ∀ y, x * y - 4 * y + x - 4 = 0 := by
   dsimp
   constructor
   · intro y
-    calc
-      4*y - 4*y + 4 - 4 = 0 := by ring
+    ring
+  · intro y hy
+    have h2 := hy 0
+    have h3: y - 4 = 0 := by
+      calc
+        y - 4 = y*0 - 4*0 + y - 4 := by ring
+        _ = 0 := by rw[h2]
+    addarith[h3]
+
 
 --2 (Hint: study Example 4.3.3 from textbook)
 example {x : ℚ} (hx : ∃! a : ℚ, a ^ 2 + 4 * a + 4 = x) : x = 0 := by
   obtain ⟨a,ha1,ha2⟩ := hx
-  sorry
+  have h1: -a - 4 = a := by
+    apply ha2
+    calc
+      (-a-4)^2 + 4*(-a-4)+4 = a^2 + 4*a + 4 := by ring
+      _ = x := ha1
+  have h2: a+2 = 0 := by
+    calc
+      a+2 = (a - (-a - 4)) / 2 := by ring
+      _ = (a - a) / 2 := by rw[h1]
+      _ = 0 := by ring
+  calc
+    x = a^2 + 4*a + 4 := by rw[ha1]
+    _ = (a+2)^2 := by ring
+    _ = 0^2 := by rw[h2]
+    _ = 0 := by numbers
+
+
 
 /-- Example 4.3.3 from Textbook
 example {x : ℚ} (hx : ∃! a : ℚ, a ^ 2 = x) : x = 0 := by
@@ -100,4 +123,16 @@ example : Prime 19 := by
 
 
 --6 (Hint: Nat.even_or_odd)
-example (p : ℕ ) (h : Prime p) : p = 2 ∨ Odd p := sorry
+example (p : ℕ ) (h : Prime p) : p = 2 ∨ Odd p := by
+  obtain he|ho := Nat.even_or_odd p
+  left
+  obtain ⟨k,hk⟩ := he
+  obtain ⟨h1,h2⟩ := h
+  obtain h3|h4 := Nat.lt_or_eq_of_le h1
+  apply ne_of_lt at h3
+  contradiction
+
+  apply symm at h4
+  exact h4
+  right
+  apply ho
