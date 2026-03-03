@@ -160,6 +160,8 @@ example (p : ℕ ) (h : Prime p) : p = 2 ∨ Odd p := by
       · left
         symm at h2eqp
         apply h2eqp
+        -- technically this case is only vacuously true because 2 cant be < 2,
+        -- but lean is happy so I don't care...
     · apply symm at h4
       left
       exact h4
