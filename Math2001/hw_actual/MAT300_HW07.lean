@@ -17,11 +17,11 @@ example : ∃! x : ℝ, ∀ y, x * y - 4 * y + x - 4 = 0 := by
   constructor
   · intro y
     ring
-  · intro y hy
-    have h2 := hy 0
-    have h3: y - 4 = 0 := by
+  · intro x hx
+    have h2 := hx 0
+    have h3: x - 4 = 0 := by
       calc
-        y - 4 = y*0 - 4*0 + y - 4 := by ring
+        x - 4 = x*0 - 4*0 + x - 4 := by ring
         _ = 0 := by rw[h2]
     addarith[h3]
 
