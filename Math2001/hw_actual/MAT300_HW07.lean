@@ -150,14 +150,19 @@ example : Prime 19 := by
 --6 (Hint: Nat.even_or_odd)
 example (p : ℕ ) (h : Prime p) : p = 2 ∨ Odd p := by
   obtain he|ho := Nat.even_or_odd p
-  left
-  obtain ⟨k,hk⟩ := he
   obtain ⟨h1,h2⟩ := h
-  obtain h3|h4 := Nat.lt_or_eq_of_le h1
-  apply ne_of_lt at h3
-  contradiction
 
-  apply symm at h4
-  exact h4
-  right
-  apply ho
+  obtain h3|h4 := Nat.lt_or_eq_of_le h1
+  · have hdiv: 2∣p := he
+    have ha: 2 = 1 ∨ 2 = p := h2 2 hdiv
+    obtain h2eq1|h2eqp := ha
+    · numbers at h2eq1
+    · left
+      symm at h2eqp
+      apply h2eqp
+  · apply symm at h4
+    left
+    exact h4
+
+  · right
+    exact ho
