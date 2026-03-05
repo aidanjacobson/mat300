@@ -134,17 +134,11 @@ example : Prime 19 := by
   apply Nat.not_dvd_of_exists_lt_and_lt
   interval_cases m
   · use 9
-    constructor
-    · numbers
-    · numbers
+    constructor <;> numbers
   · use 6
-    constructor
-    · numbers
-    · numbers
+    constructor <;> numbers
   · use 4
-    constructor
-    · numbers
-    · numbers
+    constructor <;> numbers
 
 
 --6 (Hint: Nat.even_or_odd)
