@@ -18,15 +18,15 @@ example {m k p T : ℕ} (h_m_k_eq_p : m * k = p ) (h_p_lt_T_sq : p < T ^ 2) :
     obtain h1|h2 := Nat.lt_or_ge m T
     · left
       apply h1
-    · have h3: m*k ≥ T*k := by rel[h2]
-      right
+    · right
+      intro h_neg
+      have h3: m*k ≥ T*k := by rel[h2]
       rw [h_m_k_eq_p] at h3
       have h4: T*T > T*k := by calc
         T*T = T^2 := by ring
         _ > p := by  rel[h_p_lt_T_sq]
         _ ≥ T*k := by rel[h3]
       cancel T at h4
-      intro h_neg
       have h_kltk: k < k := by calc
         k ≥ T := by rel[h_neg]
         _ > k := by rel[h4]
