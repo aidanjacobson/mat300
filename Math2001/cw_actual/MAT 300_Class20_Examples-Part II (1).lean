@@ -34,23 +34,7 @@ termination_by _ n d => 2 * n - d
 #eval fmod 7 0
 
 --example C (Lecture 6.6, textbook 6.6.2.)
-theorem fmod_add_fdiv (n d : ℤ) : fmod n d + d * fdiv n d = n := by
-  rw[fdiv, fmod]
-  split_ifs with h1 h2 h3 <;> push_neg at *
-  · have h1 := fmod_add_fdiv (n + d) d
-    calc
-      fmod (n+d) d + d*(fdiv (n+d) d - 1) = fmod (n+d) d + d*fdiv (n+d) d - d := by ring
-      _ = (n + d) - d := by rw[h1]
-      _ = n := by ring
-  · have h1 := fmod_add_fdiv (n-d) d
-    calc
-      fmod (n - d) d + d * (fdiv (n - d) d + 1) = fmod (n - d) d + d*fdiv (n-d) d + d := by ring
-      _ = n - d + d := by rw[h1]
-      _ = n := by ring
-  · rw[h3]
-    ring
-  · ring
-  termination_by _ n d => 2 * n - d
+theorem fmod_add_fdiv (n d : ℤ) : fmod n d + d * fdiv n d = n := sorry
 
 --example D (Lecture 6.6, textbook 6.6.3)
 theorem fmod_nonneg_of_pos (n : ℤ) {d : ℤ} (hd : 0 < d) : 0 ≤ fmod n d := sorry
@@ -60,15 +44,4 @@ theorem fmod_lt_of_pos (n : ℤ) {d : ℤ} (hd : 0 < d) : fmod n d < d := sorry
 
 
 -- Classwork (2) (Lecture 6.6, textbook 6.6.5)
-example (a b : ℤ) (h : 0 < b) : ∃ r : ℤ, 0 ≤ r ∧ r < b ∧ a ≡ r [ZMOD b] := by
-  use fmod a b
-  constructor
-  · apply fmod_nonneg_of_pos
-    exact h
-  · constructor
-    · apply fmod_lt_of_pos
-      exact h
-    -- there exists n such that b | a - fmod a b
-    · use fdiv a b
-      have h2: fmod a b + b * fdiv a b = a := fmod_add_fdiv a b
-      addarith[h2]
+example (a b : ℤ) (h : 0 < b) : ∃ r : ℤ, 0 ≤ r ∧ r < b ∧ a ≡ r [ZMOD b] := sorry
