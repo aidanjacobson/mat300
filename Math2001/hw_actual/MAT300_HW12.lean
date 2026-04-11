@@ -24,10 +24,14 @@ theorem our_not_prime_implies_has_factor {n : ℕ} (hp : ¬ Prime n) (hp2 : 2 �
   have H : ¬ (∀ (m : ℕ), 2 ≤ m → m < n → ¬m ∣ n)
   · intro H
     have Hcontra: Prime n := by
-      sorry
+      apply prime_test
+      · exact hp2
+      · intro m h1 h2 h3
+        have h5 := H m h1 h2
+        contradiction
     contradiction
   push_neg at *
-  sorry
+  exact H
 
 
 -- Problem 2
@@ -43,17 +47,38 @@ theorem our_exists_prime_factor {n : ℕ} (hn2 : 2 ≤ n) : ∃ p : ℕ, Prime p
     obtain ⟨m, hm2, hmn, hm_div_n⟩ := our_not_prime_implies_has_factor hn hn2
     obtain ⟨x, hx⟩ := hm_div_n
     have IH : ∃ p, Prime p ∧ p ∣ m := exists_prime_factor hm2 -- inductive hypothesis
-    sorry
+    rw[hx]
+    obtain ⟨p2,h1,h2⟩ := IH
+    use p2
+    constructor
+    · exact h1
+    · obtain ⟨y,hy⟩ := h2
+      use y*x
+      calc
+        m*x = p2*y*x := by rw[hy]
+        _ = p2*(y*x) := by ring
 
 -- Problem 3
 theorem LB {A p : ℕ} (h1: A > 0) (h2: p * (l + 1) = A + 1) (h3: 2 ≤ p) : A > p * l := by
   have h4: p * l + p < A + p := by
-    sorry
+    have h5: 1 < p := by calc
+      1 < 1 + 1 := by extra
+      _ = 2 := by numbers
+      _ ≤ p := by rel[h3]
+    calc
+      p*l + p = p*(l+1) := by ring
+      _ = A + 1 := by rw[h2]
+      _ < A + p := by rel[h5]
+
   addarith[h4]
 
 -- Problem 4
 theorem UB {A p : ℕ }  (h2: p * (l + 1) = A + 1)  : A < p * (l + 1) := by
-  sorry
+  have h4: p*(l+1) + p > A + p := by
+    calc
+      p*(l+1) + p = A + 1 + p := by rw[h2]
+      _ > A + p := by extra
+  addarith[h4]
 
 
 /-From class 19-/
@@ -94,10 +119,14 @@ theorem our_dvd_factorial (n : ℕ) : ∀ d, 1 ≤ d → d ≤ n → d ∣ n ! :
 theorem our_factorial_pos (n : ℕ) : 0 < n ! := by
   simple_induction n with k IH
   · -- base case
-    sorry
+    calc
+      0 < 1 := by numbers
+      _ = 0! := by rw[factorial]
   · -- induction step
     have h : (k + 1) !  > 0 := by
-      sorry
+      calc
+        (k+1) ! = (k+1) * k ! := by rw[factorial]
+        _ > (k+1) * 0 := by rel[IH]
     apply h
 
 -- show that if p divides A + 1, then p does not divide A
@@ -129,7 +158,12 @@ example (N : ℕ) : ∃ p > N, Prime p := by
   match k with
     | 0 => -- this case can't happn p * k = N ! + 1
       have hk_contra : 0 < 0 := by
-        sorry
+        calc
+          0 < N ! := by rel[hN0]
+          _ < N ! + 1 := by extra
+          _ = p * 0 := by rw[hk]
+          _ = 0 := by ring
+
       numbers at hk_contra
     | l + 1 =>
       use p
