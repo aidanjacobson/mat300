@@ -189,11 +189,23 @@ def f (x : ℝ) : ℝ := 2 * x + 4
 
 -- Problem 7
 example : Injective f := by
-  sorry
+  dsimp[Injective]
+  intro a1 a2 h
+  calc
+    a1 = (2*a1 + 4 - 4) / 2 := by ring
+    _ = ((f a1) - 4) / 2 := by rw[f]
+    _ = ((f a2) - 4) / 2 := by rw[h]
+    _ = ((2*a2 + 4) - 4) / 2 := by rw[f]
+    _ = a2 := by ring
 
 -- Problem 8
 example : Surjective f := by
-  sorry
+  dsimp[Surjective]
+  intro b
+  use (b-4)/2
+  calc
+    f ((b-4) / 2) = 2 * ((b-4)/2) + 4 := by rw[f]
+    _ = b := by ring
 
 -- function for Problems 9 and 10
 def g (x : ℝ) : ℝ := x ^ 2 - 4 * x + 3
@@ -201,9 +213,30 @@ def g (x : ℝ) : ℝ := x ^ 2 - 4 * x + 3
 -- Problem 9
 -- Hint: may have to use calc
 example : ¬ Injective g := by
-  sorry
+  dsimp[Injective]
+  push_neg
+  use 1, 3
+  constructor
+  · calc
+      g 1 = 1^2 - 4*1 + 3 := by rw[g]
+      _ = 3^2 - 4*3 + 3 := by numbers
+      _ = g 3 := by rw[g]
+  · numbers
+
 
 -- Problem 10
 -- Hint: may have to complete the square
 example : ¬ Surjective g := by
-  sorry
+  dsimp[Surjective]
+  push_neg
+  use -2
+  intro a
+  apply ne_of_gt
+  have h: g a  = (a-2)^2 - 1 := by calc
+    g a = a^2 - 4*a + 3 := by rw[g]
+    _ = (a-2)^2 - 1 := by ring
+
+  calc
+    -2 < -1 := by numbers
+    _ ≤ (a-2)^2 - 1 := by extra
+    _ = g a := by rw[h]
