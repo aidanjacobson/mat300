@@ -36,7 +36,12 @@ example {f : X → Y} {g1 g2 : Y → X} (h1 : Inverse f g1) (h2 : Inverse f g2) 
     g1 = g2 := by
     obtain ⟨h3,h4⟩ := h1
     obtain ⟨h5,h6⟩ := h2
-    sorry
+    calc
+      g1 = g1 ∘ id := by rfl
+      _ = g1 ∘ (f ∘ g2) := by rw[h6]
+      _ = (g1 ∘ f) ∘ g2 := by rfl
+      _ = id ∘ g2 := by rw[h3]
+      _ = g2 := by rfl
 
 open Set
 
@@ -56,13 +61,21 @@ example : -3 ∈ {x : ℝ | ∀ y : ℝ, x ≤ y ^ 2} := by
 example : {m : ℤ | m ≥ 10} ⊆ {n : ℤ | n ^ 3 - 7 * n ^ 2 ≥ 4 * n} := by
   dsimp[Set.subset_def]
   intro n h
-  have h2: n^3 - 7*n^2 - 4*n ≥ 0 := by calc
-    n^3 - 7*n^2 - 4*n = n*(n^2 - 7*n - 4) := by ring
-    _ ≥ n*(10^2 - 7*n - 4) := by rel[h]
-    _ = -7*n*n + 96*n := by ring
-    _ ≥ -7*10*n + 96*10 := by rel[h]
 
-  addarith[h2]
+  have h3: 30*n - 4*n ≥ 0 := by
+    calc
+      30*n - 4*n = 26*n := by ring
+      _ ≥ 26*10 := by rel[h]
+      _ ≥ 0 := by numbers
+  have h2: 30*n ≥ 4*n := by addarith[h3]
+
+  calc
+    n^3 - 7*n^2 = n*n^2 - 7*n^2 := by ring
+    _ ≥ 10*n^2 - 7*n^2 := by rel[h]
+    _ = 3*n*n := by ring
+    _ ≥ 3*10*n := by rel[h]
+    _ = 30*n := by ring
+    _ ≥ 4*n := by rel[h2]
 
 
 -- example : {m : ℤ | m ≥ 10} ⊈ {n : ℤ | n ^ 3 - 7 * n ^ 2 ≥ 4 * n} := sorry
